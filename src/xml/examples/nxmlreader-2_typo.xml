@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE programming_languages SYSTEM "nxmlreader-2.dtd">
+<programming_languages>
+	<language name="c++">
+		<!-- Note the small, subtle typo above -->
+		<tipe>compiled</tipe>
+		<compiler>g++</compiler>
+		<compiler>icc</compiler>
+	</language>
+	<language name="python">
+		<type>interpreted</type>
+		<interpreter>python</interpreter>
+	</language>
+</programming_languages>

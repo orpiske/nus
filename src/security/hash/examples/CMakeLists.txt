@@ -1,0 +1,15 @@
+INCLUDE(NSecurity)
+
+IF(WIN32)
+	REMOVE_DEFINITIONS(/DNLIB_SHARED)
+ELSE(WIN32)
+	REMOVE_DEFINITIONS(-DNLIB_SHARED)
+ENDIF(WIN32)
+
+
+ADD_EXECUTABLE(
+	ex_nhashes
+	ex_nhashes.cpp
+	hashapp.h
+	hashapp.cpp
+)

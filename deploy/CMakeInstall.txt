@@ -1,0 +1,94 @@
+######## 
+# This macro is used to install the examples
+########
+MACRO(InstallExamples path dest)
+	IF(MODULE_EXAMPLE_SRC) 
+		
+		# Install headers
+		FILE(GLOB HEADERLIST ${CMAKE_BINARY_DIR}/${path}/*.h*)
+		FOREACH(file ${HEADERLIST})
+			INSTALL(
+				FILES ${file}
+				DESTINATION ${N_EXAMPLE_DIR}/${dest}
+				PERMISSIONS OWNER_READ OWNER_WRITE 
+							GROUP_READ GROUP_WRITE 
+							WORLD_READ WORLD_WRITE
+			)
+		ENDFOREACH(file)
+
+		# Then source code
+		FILE(GLOB SOURCELIST ${CMAKE_BINARY_DIR}/${path}/*.cpp*)
+		FOREACH(file ${SOURCELIST})
+			INSTALL(
+				FILES ${file}
+				DESTINATION ${N_EXAMPLE_DIR}/${dest}
+				PERMISSIONS OWNER_READ OWNER_WRITE 
+							GROUP_READ GROUP_WRITE 
+							WORLD_READ WORLD_WRITE
+			)
+		ENDFOREACH(file)
+
+		# Then the CMakeLists.txt file
+		INSTALL(
+			FILES ${CMAKE_BINARY_DIR}/${path}/CMakeLists.txt
+			DESTINATION ${N_EXAMPLE_DIR}/${dest}
+			PERMISSIONS OWNER_READ OWNER_WRITE
+						GROUP_READ GROUP_WRITE
+						WORLD_READ WORLD_WRITE
+		)
+
+	ENDIF(MODULE_EXAMPLE_SRC) 
+ENDMACRO(InstallExamples)
+
+
+######## 
+# This macro is used to install the headers
+########
+MACRO(InstallHeaders path dest)
+	IF (NOT EXISTS ${CMAKE_BINARY_DIR}/${path})
+		MESSAGE(FATAL_ERROR "Directory ${CMAKE_BINARY_DIR}/${path} does not exist")
+	ENDIF (NOT EXISTS ${CMAKE_BINARY_DIR}/${path})
+	
+	MESSAGE(STATUS "Directory ${CMAKE_BINARY_DIR}/${path} added to distribution")
+	FILE(GLOB HEADERLIST ${CMAKE_BINARY_DIR}/${path}/*.h*)
+	FOREACH(file ${HEADERLIST})
+		INSTALL(
+			FILES ${file}
+			DESTINATION ${N_HEADER_DIR}/${dest}
+		)
+	ENDFOREACH(file)
+ENDMACRO(InstallHeaders)
+
+######## 
+# This macro is used to install the modules
+########
+MACRO(InstallCMakeModule source name)
+	IF (MODULE_CMAKE_MODULES)
+		INSTALL(
+			FILES ${CMAKE_BINARY_DIR}/${path}/${source}/${name}.cmake 
+			DESTINATION ${N_CMAKE_MODULE_DIR}
+		)
+	ENDIF (MODULE_CMAKE_MODULES)
+ENDMACRO(InstallCMakeModule)
+
+
+######## 
+# These macro are used to install regular files
+########
+MACRO (InstallFile file dest)
+	INSTALL(
+		FILES ${CMAKE_BINARY_DIR}/${file}
+		DESTINATION ${dest}
+		PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+	)
+ENDMACRO(InstallFile)
+
+MACRO (InstallFileMask source mask dest) 
+	FILE(GLOB files RELATIVE source mask)
+	INSTALL(
+		FILES ${files}
+		DESTINATION ${dest}
+		PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+	)
+ENDMACRO(InstallFileMask)
+

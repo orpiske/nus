@@ -1,0 +1,28 @@
+ADD_EXECUTABLE(
+	nproj
+	nproj.h	
+	nproj.cpp
+	nprojmain.cpp
+	nfilecreator.h
+	nfilecreator.cpp
+)
+
+IF (WIN32) 
+	REMOVE_DEFINITIONS(/DNLIB_SHARED)
+ELSE(WIN32)
+	REMOVE_DEFINITIONS(-DNLIB_SHARED)
+ENDIF(WIN32)
+
+
+LINK_DIRECTORIES(
+	${LIBRARY_OUTPUT_PATH}
+)
+
+TARGET_LINK_LIBRARIES(
+	nproj
+	nbase-${N_VERSION}
+)
+
+INSTALL(TARGETS nproj
+	RUNTIME DESTINATION ${N_RUNTIME_DIR}
+)

@@ -1,0 +1,805 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<book>
+	<bookinfo>
+		<title>Nemesis Utilities System Framework Handbook</title>
+		<toc></toc>
+	
+		<authorgroup>
+			<author>
+    			<firstname>Otavio</firstname>
+    			<othername>Rodolfo</othername>
+    			<surname>Piske</surname>
+    			<affiliation>
+      				<orgname>Nemesis Project</orgname>
+      				<address>
+        				<email>angusyoung@gmail.com</email>
+      				</address>
+    			</affiliation>
+  			</author>
+		</authorgroup>	
+	</bookinfo>	
+
+	<!-- Introduction -->
+	<chapter id="intro">
+		<title>Introduction</title>
+		<para>NUS, is the Nemesis Utilities System: a portable and simple to use C++ 
+		application development framework. 
+		NUS doesn't target on any problem domain specifically, and it's targeted to small 
+		and non-complex applications where using a bigger framework (like GTK+, QT, Boost) 
+		is not viable. 
+		</para>
+		<para>Though NUS is developed to run in Linux and Mac OS X, it takes portability in
+		mind and also run on Windows with little effort, althought some functionality may
+		not be present.
+		</para>
+		<para>NUS is modular, that means that you can choose to use only the functionality 
+		you need, which leads to less complexity for development and deployment. It also 
+		makes easier to study it, since you can focus only on what interests you.
+		</para>
+	</chapter>
+	
+	<!-- Getting Started -->
+	<chapter id="starting">
+		<title>Getting Started</title>
+	
+		<section>
+			<title>Download NUS</title>
+			<formalpara>
+				<para>The first thing to get started is to download NUS for you platform. You 
+				can do so in the <ulink url="http://dev.angusyoung.org/?page_id=8">download</ulink>
+				home page.
+				</para>
+			</formalpara>
+		</section>	
+	
+		<section>
+			<title>Checking NUS Dependencies</title>
+			<formalpara>
+				<para>Before compiling NUS, make sure you have installed the following packages:
+					<itemizedlist>
+						<listitem><para><ulink url="http://www.xmlsoft.org/">libxml2</ulink></para></listitem>
+						<listitem><para><ulink url="http://www.openssl.org/">openssl</ulink></para></listitem>
+						<listitem>
+							<para><ulink url="http://www.mysql.com">mysql</ulink> (this is 
+							required only if you're going to enable the mysql database module
+							</para>
+						</listitem>
+						<listitem><para><ulink url="http://www.zlib.net">zlib</ulink></para></listitem>
+						<listitem><para>Iconv (for Windows only)</para></listitem>
+					</itemizedlist>
+				
+				You'll also need the following tools:
+				 	<itemizedlist>
+						<listitem>
+							<para>A compiler: on Linux and Mac OS X NUS can be compiled with <application>GCC</application>.
+							For Windows you can download and install <application>Visual Studio 2005 Express</application>, 
+							which is available for free (note that NUS on Windows is experimental)
+							</para>
+						</listitem>
+						<listitem><para>The <ulink url="http://www.cmake.org/">cmake</ulink> 
+						build/project tool</para></listitem>
+						<listitem><para>A make program: <application>GNU Make</application> for Mac OS X and Linux or Microsoft
+						<application>nmake</application> for Windows.</para></listitem>
+						<listitem><para>Your OS SDK: OS common headers, libraries, etc. For Windows you get it with 
+						<ulink url="http://www.microsoft.com/downloads/details.aspx?FamilyId=0BAF2B35-C656-4969-ACE8-E4C0C0716ADB&displaylang=en">Platform SDK</ulink>, 
+						for Mac OS you get it with <ulink url="http://www.apple.com/macosx/developertools/xcode.html">XCode</ulink> 
+						and for Linux it depends on your distribution.</para></listitem>
+					</itemizedlist>
+				</para>
+				<note>For Windows you can libxml2, openssl, zlib and iconv at 
+				<ulink url="http://www.zlatkovic.com/pub/libxml/">http://www.zlatkovic.com/pub/libxml/</ulink>.
+				Then extract the packages to the contrib directory within NUS source code.
+				</note>
+			</formalpara>
+		</section>		
+	
+		<section>
+			<title>Pre-configuring NUS</title>
+				<para>The first thing to let the cmake build too find the libraries and execute 
+				the initial project configuration. This can be done using the following command 
+				(<emphasis>pay attention to the fact that you need to run the commands 
+				from inside the NUS directory, from now on.</emphasis>): 
+				</para>
+				<para>To configure NUS on Linux, Mac OS X, Windows (using Visual Studio to manage the project)
+				or any other unix like:
+				</para>
+				<para><command>cmake .</command></para>
+				<para>To configure NUS on Windows using the NMake Makefile generator use:</para>
+				<para><command>cmake -G "NMake Makefiles" .</command></para>
+				<para>Note that the command is cmake followed by a dot, which identifies the path where 
+				it the CMakeLists.txt file. This command will generate an output that is similar
+				to this:				
+				</para>
+				<para>
+					<programlisting>-- Check for working C compiler: /usr/bin/gcc
+-- Check for working C compiler: /usr/bin/gcc -- works
+-- Check size of void*
+-- Check size of void* - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Looking for C++ include cstdio
+-- Looking for C++ include cstdio - found
+-- Looking for C++ include cstdlib
+-- Looking for C++ include cstdlib - found
+-- Looking for C++ include cstring
+-- Looking for C++ include cstring - found
+-- Looking for C++ include cassert
+-- Looking for C++ include cassert - found
+-- Looking for C++ include ctime
+-- Looking for C++ include ctime - found
+-- Looking for C++ include cstdarg
+-- Looking for C++ include cstdarg - found
+-- Looking for C++ include exception
+-- Looking for C++ include exception - found
+-- Looking for C++ include new
+-- Looking for C++ include new - found
+-- Looking for C++ include ostream
+-- Looking for C++ include ostream - found
+-- Looking for include files HAVE_DIRENT_H
+-- Looking for include files HAVE_DIRENT_H - found
+-- Looking for include files HAVE_SYS_TYPES_H
+-- Looking for include files HAVE_SYS_TYPES_H - found
+-- Looking for include files HAVE_SYS_STAT_H
+-- Looking for include files HAVE_SYS_STAT_H - found
+-- Looking for include files HAVE_UNISTD_H
+-- Looking for include files HAVE_UNISTD_H - found
+-- Looking for include files HAVE_NETDB_H
+-- Looking for include files HAVE_NETDB_H - found
+-- Looking for include files HAVE_SYS_SOCKET_H
+-- Looking for include files HAVE_SYS_SOCKET_H - found
+-- Looking for include files HAVE_NETINET_IN_H
+-- Looking for include files HAVE_NETINET_IN_H - found
+-- Looking for include files HAVE_ARPA_INET_H
+-- Looking for include files HAVE_ARPA_INET_H - found
+-- Adding Unix related build rules
+-- Enabling module Events
+-- Enabling module network
+-- Enabling module xml
+-- Enabling module security
+-- Dependency check for MODULE_DBAL
+-- Checking if MODULE_NETWORK is enabled
+-- Enabling module db access layer
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/otavio/Projects/nus-devel
+					</programlisting>
+				</para>
+
+		</section>	
+	
+	
+		<section>
+			<title>Configuring NUS</title>
+			<formalpara>
+				<para>After cmake has found all the dependencies it needs, you can proceed with 
+				configuring NUS for your own needs. Basically what will need to configure are 
+				which modules will want to compile and install, where you want to install and the
+				build type.</para>
+				<para>There two ways you can configure NUS: the first and easiest one is using 
+				CMake's own interface, which provides you with a curses interface like shown below:
+					<screenshot>
+						<screeninfo>Configuring NUS</screeninfo>
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="images/nus-config-01.png" format="PNG" />
+							</imageobject>
+							<textobject>
+								<phrase>Example of CMake's UI for configuration</phrase>
+							</textobject>
+						</mediaobject>
+					</screenshot>
+				</para>
+				<para>	
+					To launch the CMake's own UI and configure NUS you can use the command
+					<command>ccmake .</command>
+				</para>
+				<para>The second and hardest way to configure NUS is using the command line. The
+				command is in the format <command>ccmake <option>-DVARIABLE_NAME:VARIABLE_TYPE=</option><replaceable>VALUE</replaceable> .</command>
+				</para>
+				<para>For instance, let's supose you want to configure NUS disabling the DBAL 
+				module, using Release build type and with everything else as default. The command
+				you would use is:</para>
+				<para>
+					<command>cmake <option>-DCMAKE_BUILD_TYPE:Text=</option><replaceable>Release</replaceable> <option>-DMODULE_DBAL:Boolen=</option><replaceable>False</replaceable> .</command>
+				</para>
+				<para>No matter which you way you choose to configure NUS you'll have to define 
+				what do you want and what you don't want. 
+				</para>
+				<note>Please take in mind that NUS's 
+				database drivers are disabled by default. If you don't care about them you can
+				jump to the next step.</note>
+				<table>
+					<title>NUS Options</title>
+						<tgroup cols="3">
+						<thead>
+							<row>
+								<entry>Option</entry>
+								<entry>Default Value</entry>
+								<entry>Description</entry>
+							</row>
+						</thead>
+						<tbody>
+							<row>
+								<entry>CMAKE_BUILD_TYPE</entry>
+								<entry>Debug</entry>
+								<entry>Defines whether to compile for Release, Debug, ReleaseDebug, etc. Use Release.</entry>
+							</row>
+							<row>
+								<entry>CMAKE_INSTALL_PREFIX</entry>
+								<entry>/usr/local</entry>
+								<entry>The path where to install NUS. I recommend using /usr.</entry>
+							</row>
+							<row>
+								<entry>INSTALL_CONTRIB_FILES</entry>
+								<entry>OFF</entry>
+								<entry>Defines whether to install contrib files (only for Windows).</entry>
+							</row>
+							<row>
+								<entry>MODULE_CMAKE_MODULES</entry>
+								<entry>ON</entry>
+								<entry>Install cmake integration modules.</entry>
+							</row>
+							<row>
+								<entry>MODULE_DBAL</entry>
+								<entry>ON</entry>
+								<entry>Defines whether to compile the database access layer.</entry>
+							</row>
+							<row>
+								<entry>MODULE_DBAL_MYSQL</entry>
+								<entry>OFF</entry>
+								<entry>Defines whether to compile the MySQL DBAL driver</entry>
+							</row>
+							<row>
+								<entry>MODULE_EVENTS</entry>
+								<entry>ON</entry>
+								<entry>Defines whether to compile the events module.</entry>
+							</row>
+							<row>
+								<entry>MODULE_NETWORK</entry>
+								<entry>ON</entry>
+								<entry>Defines whether to compile the network module.</entry>
+							</row>
+							<row>
+								<entry>MODULE_SECURITY</entry>
+								<entry>ON</entry>
+								<entry>Defines whether to compile the security module.</entry>
+							</row>
+							<row>
+								<entry>MODULE_XML</entry>
+								<entry>ON</entry>
+								<entry>Defines whether to compile the xml module.</entry>
+							</row>
+							<row>
+								<entry>MODULE_EXAMPLE_SRC</entry>
+								<entry>ON</entry>
+								<entry>Defines whether to install the examples source code.</entry>
+							</row>					
+						</tbody>
+					</tgroup>
+				</table>
+				<para>There are more options available but they are not important unless you plan to 
+				develop NUS itself. If that's what you want to do, please check the CMakeLists.txt
+				file within the root directory of the NUS source code.</para>
+			</formalpara>
+		</section>
+	
+		<section>
+			<title>Compiling NUS</title>
+			<formalpara>
+				<para>After you have configured NUS you can proceed with compiling it. This 
+				can be done by issuing the command <command>make</command> within NUS source
+				code directory.
+				</para>
+			</formalpara>
+		</section>
+		
+		<section>
+			<title>Installing NUS</title>
+			<formalpara>
+				<para>Installing NUS is as straightforward as compiling it: just run the 
+				command <command>make <option>install</option></command> and NUS will be installed on the path
+				you have previously configured.
+				</para>
+			</formalpara>
+		</section>
+	</chapter>
+	
+	<!-- Developing with NUS -->
+	<chapter id="developing">
+		<title>Developing with NUS</title>
+		<section>
+			<title>The Modules</title>
+			<formalpara>
+				<para>NUS separates it's classes in differents modules. The concept of a module
+				is that it is a set of classes, organized within a library, that tries to 
+				solve the problem within a particular area of domain. 
+				</para>
+				<para>These are the modules provided by NUS:
+					<itemizedlist>
+						<listitem><para>NBase (core module)</para></listitem>
+						<listitem><para>NEvents (provides signal/slot functionality)</para></listitem>
+						<listitem><para>NNetwork (provides name solving and TCP/IP connectivity)</para></listitem>
+						<listitem><para>NXml (provides classes for manipulating XML data)</para></listitem>
+						<listitem><para>NSecurity (provides classes to manipulate hashes)</para></listitem>
+						<listitem><para>NDBal (database access layer)</para></listitem>
+					</itemizedlist>
+				 </para>
+			</formalpara>
+		</section>
+		
+		<section>
+			<title>NUS and CMake</title>
+			<formalpara>
+				<para>NUS doesn't come with any application to deal with project requirements,
+				files, libraries, etc. Instead it relies heavily on the <application>CMake</application>
+				tool, which not only provide all that functionality but is widely used and well 
+				<ulink url="http://www.cmake.org/HTML/Documentation.html">documented</ulink>.
+				</para>
+				<para>Despite that, it is possible to use NUS without <application>CMake</application>, 
+				however this is not documented at the moment. 
+				</para>
+				<tip>
+					<title>NUS without CMake Tip</title>
+					<para>Basically all you need to do to use NUS without CMake is to 
+					include the path to the NUS header files and the modules you want
+					to link to in your Makefile or whatever you use. 
+  					</para>
+				</tip> 	
+			</formalpara>
+		</section>
+		
+		<section>
+			<title>Understand the CMakeLists.txt file</title>
+			<formalpara>
+				<para>The <filename>CMakeLists.txt</filename> is the file that contains your 
+				project definitions, build rules and deployment information. It's recommended 
+				that you have some knowledge of <application>CMake</application> in order to 
+				fully customize the file, however with very few steps you can be able to 
+				develop using NUS without much hassle. A very basic CMakeLists.txt file: 
+				</para>
+				
+				<programlisting>
+# CMake project file for NUS
+# Generated by NProj 0.1.0 with NUS version 0.3.0
+# Project Modules
+INCLUDE(NBase)
+
+# Project executable
+ADD_EXECUTABLE(
+	helloworld
+	helloworld.cpp
+)
+				</programlisting>
+				<itemizedlist>
+					<listitem>
+						<para><function>INCLUDE</function> tells <application>CMake</application>
+						to load the build rules, definitions and dependency check for the NUS base module. 
+						<emphasis>The module NBase is required for absolutely every single NUS application
+						</emphasis>.
+						</para>
+					</listitem>
+				
+					<listitem>
+						<para><function>ADD_EXECUTABLE</function> tells <application>CMake</application>
+						to create an application named <filename>helloworld</filename> from 
+						compiling the source file <filename>helloworld.cpp</filename>. For that source 
+						file the rules loaded from the included CMake module named NBase. <emphasis>This
+						will add a target, named as the binary it will generated. It is important to have 
+						this concept because every now and then you see that mentioned in the 
+						<application>CMake</application> documentation.
+						</emphasis>
+						</para>
+					</listitem>
+				</itemizedlist>				
+				
+				<para>This is the only stuff you'll need to compile basic NUS programs. So, what if
+				you need to add a few defines, libraries and some installation rules? Well, below there
+				are some of the other useful function you might need, followed by a more complex example.
+				Also, don't worry about the functions parameters right now. You'll understand them when you
+				see the commented example.
+					<itemizedlist>
+						<listitem>
+							<para><function>ADD_DEFINITIONS</function> tells <application>CMake</application>
+							to add a definition to the build. The parameter added to this function is the same 
+							thing as <command>gcc <option>-D</option><replaceable>NAME</replaceable></command>
+							</para>
+						</listitem>
+						
+						<listitem>
+							<para><function>LINK_LIBRARIES</function> tells <application>CMake</application>
+							to link all targets with a library. You don't need to add this to the NUS libraries 
+							because when you include a NUS module using the <function>INCLUDE</function> function
+							it already does that for you.
+							</para>
+						</listitem>
+						
+						<listitem>
+							<para><function>ADD_LIBRARY</function> tells <application>CMake</application>
+							to crate a library named as the first parameter for this function. If you are going to
+							create a library use this instead of <function>ADD_EXECUTABLE</function>, or both, if 
+							that's the case.
+							</para>
+						</listitem>
+						
+						<listitem>
+							<para><function>INSTALL</function> tells <application>CMake</application>
+							where to install the application (or library) you've just created.
+							</para>
+						</listitem>
+						
+						<listitem>
+							<para><function>MESSAGE</function> tells <application>CMake</application>
+							to display a message in the standard output with the parameters given.
+							</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+				<para>A more complex example:</para>
+				
+				
+				<programlisting>
+# CMake project file for NUS
+# Generated by NProj 0.1.0 with NUS version 0.3.0
+# Project Modules
+INCLUDE(NBase)
+
+# Add a definition for the program
+ADD_DEFINITIONS(
+	-DEXAMPLE_OF_A_DEFITION
+)
+
+
+# Link to the DL library 
+# The DL library exists only for Linux, and it's present
+# just a matter of example.
+LINK_LIBRARIES(
+	dl
+)
+
+
+MESSAGE(STATUS "Hi CMake")
+
+# Project executable
+ADD_EXECUTABLE(
+	helloworld
+	helloworld.cpp
+)
+				</programlisting>
+				
+				<para>Enabling the cmake verbose output you can note how the first is different from the 
+				second one. Let's look at a snippet of the first one:</para>
+				<para><programlisting>[100%] Building CXX object CMakeFiles/helloworld.dir/helloworld.o
+/usr/bin/c++   -I/usr/include/nus/base -I/usr/include/nus/base/bio -I/usr/include/nus/base/exceptions -I/usr/include/nus/base/output   -o CMakeFiles/helloworld.dir/helloworld.o -c /home/otavio/tmp/hello_nus/helloworld.cpp
+Linking CXX executable helloworld
+/usr/bin/cmake -P CMakeFiles/helloworld.dir/cmake_clean_target.cmake
+/usr/bin/c++      -fPIC "CMakeFiles/helloworld.dir/helloworld.o"   -o helloworld -rdynamic -lnbase-0.3.0 
+</programlisting></para>
+				
+				<para>And now a snippet of the second one:</para>
+				<para><programlisting>[100%] Building CXX object CMakeFiles/helloworld.dir/helloworld.o
+/usr/bin/c++   -I/usr/include/nus/base -I/usr/include/nus/base/bio -I/usr/include/nus/base/exceptions -I/usr/include/nus/base/output   -DEXAMPLE_OF_A_DEFITION -o CMakeFiles/helloworld.dir/helloworld.o -c /home/otavio/tmp/hello_nus/helloworld.cpp
+Linking CXX executable helloworld
+/usr/bin/cmake -P CMakeFiles/helloworld.dir/cmake_clean_target.cmake
+/usr/bin/c++      -fPIC "CMakeFiles/helloworld.dir/helloworld.o"   -o helloworld -rdynamic -lnbase-0.3.0 -ldl</programlisting>
+				</para>
+				<para>And during the configure phase you'll note the phrase "Hi CMake" displayed on the screen.</para>
+				<para>Finally, you'll note that CMake not only is straightforward to use and is well documented, 
+				but that it's also a pleasure to deal with. </para>
+			</formalpara>
+		</section>
+		
+		
+		<section>
+			<title>Hello World with NUS</title>
+			<formalpara>
+				<para>A tutorial is never complete with the worldwide famous
+					<ulink url="http://en.wikipedia.org/wiki/Hello_world">"Hello World"</ulink> example. This 
+					wouldn't be different with NUS. So, here it is:
+				</para>
+				<programlisting>
+// Source code file created by nproj 0.1.0 with NUS version 0.3.0
+#include &lt;noutput.h&gt;
+
+int main(void) {
+	NMessage::print() &lt;&lt; "Hello world!";
+
+
+	return 0;
+}</programlisting>
+				
+			<para>If you want, you can download it 
+			<ulink url="http://dev.angusyoung.org/docs/0.3.0/online_examples/hello_nus.tar.bz2">here</ulink>. To compile it
+			just run <userinput>cmake . &amp;&amp; make &amp;&amp; ./helloworld</userinput>.</para>				
+				
+			</formalpara>
+		</section>	
+		
+		<section>
+			<title>Using nproj</title>
+			<formalpara>
+				<para>NUS also comes with a small application, named <application>nproj</application> to bootstrap 
+				your projects. It won't manage them, it's just create the initial configuration for you, create
+				files and a few cmake rules.</para>
+				<para>Basic usage is as follows: 
+				<command>nproj <option>-m</option> <replaceable>module1,module2,...,moduleN</replaceable> 
+				<option>-e</option> <replaceable>executableName</replaceable> 
+				<option>-f</option> <replaceable>sourceFile1,sourceFile2,...,sourceFileN</replaceable></command></para>
+				<example><title>Creating Hello World with nproj</title>
+					nproj -m NBase -e helloworld -f helloword.cpp</example>
+					
+				<para>It'll also provide more functionality, which you can consult using the 
+				<option>--help</option> param:</para>
+				
+				<programlisting>otavio@venus ~/Projects/nus-devel $ nproj --help
+Help:
+	 --help (-h short option)
+		Display the help for this program
+
+	 --modules (-m short option)
+		Sets the NUS modules for the project
+
+	 --executable (-e short option)
+		Sets the executable name for the project
+
+	 --exefiles (-f short option)
+		Sets the executable file names for the project
+
+	 --library (-l short option)
+		Sets the library name for the project
+
+	 --lib-files (-F short option)
+		Sets the library file names for the project
+
+	 --link-libraries (-L short option)
+		Sets the external libraries the project will link to
+
+	 --license 
+		Sets the license for the project (currently only LGPL)
+
+	 --force 
+		Force the overwriting of files
+
+	 --version (-v short option)
+		Displays the program version
+</programlisting>
+
+			<para>Acceptable values for <option>--modules</option> are <replaceable>NBase</replaceable>,
+			<replaceable>NEvents</replaceable>,<replaceable>NNetwork</replaceable>,<replaceable>NSecurity</replaceable>,
+			<replaceable>NXml</replaceable> and <replaceable>NDBal</replaceable>. If you are going to create 
+			a library use <option>--library</option> and <option>--library-files</option> instead of 
+			<option>--executable</option> and <option>--executable-files</option>.</para>
+				
+				
+			</formalpara>	
+		</section>	
+		
+	</chapter>
+	
+	<chapter id="api">
+		<title>The NUS API</title>
+	
+		<section>
+			<title>Introduction to the API</title>
+			<formalpara>
+				<para>The NUS API is fully documented. Note this link for your own needs:
+<ulink url="http://dev.angusyoung.org/docs/0.3.0/api/">http://dev.angusyoung.org/docs/current/api/</ulink>. 
+				This is the link to the API documentation. Every single class present on NUS is 
+				documented there. In this document I'll not dig into the details of the methods, classes, 
+				etc, unless it's extremely important to the subject in question. If you need to get into the
+				details I recommend looking there. 
+				</para>
+			</formalpara>		
+		</section>	
+		
+		<section>
+			<title>The Base Module</title>
+			<formalpara>
+				<para>The base module contains the core of NUS and can be used for developing applications 
+				and NUS itself. It provides basic functionality that will be required for any application
+				developed using NUS.</para>
+				<para>Within that module there are a few classes that you'll need to 
+				understand if you want to master development with NUS. These are:</para>
+				
+					<itemizedlist>
+						<listitem>
+							<para><classname>NString</classname>: the NUS string class. It abstracts the concept
+							used by C and C++ of a <type>char *</type> (<type>char</type> pointer). It'll be used
+							always a string is required.
+							</para>
+						</listitem>
+						<listitem>
+							<para><classname>NDataStream</classname>: this class provides serialization of raw, 
+							binary data. You can imagine it as being a <type>void *</type> (<type>void</type> 
+							pointer) that grows and shrinks as required. It's commonly used as the abstraction 
+							for I/O operations. 
+							</para>
+						</listitem>
+						<listitem>
+							<para><classname>NList</classname>: implements a double-linked list. Will be used 
+							whenever it's required the hability to easily navigate within a set of data.
+							</para>
+						</listitem>
+						<listitem>
+							<para><classname>NIODevice</classname>: the base class that provides I/O handling. 
+							Understanding this class is required if you will work with file operations using 
+							<classname>NFile</classname> or socket operations through <classname>NTcpSocket</classname>
+							</para>
+						</listitem>
+						<listitem>
+							<para><classname>NException</classname>: the base exception class. NUS is an relies on
+							exceptions for handling errors and this the base class for the exception types 
+							thrown by NUS.
+							</para>
+						</listitem>
+
+					</itemizedlist>
+				
+			</formalpara>	
+		</section>	
+		
+
+		<section>
+			<title>The Events Module</title>
+			<formalpara>
+				<para>This module provides a simple event based infra-structure. You can use it 
+				to develop an application that is event-aware, that is, that can react to your 
+				own configured events.</para>
+
+				<section>
+				<title>The Examples In Depth: Events Module</title>
+					<formalpara>
+						<para>lorem ipsum</para>
+					</formalpara>	
+				</section>	
+
+			</formalpara>	
+		</section>
+
+
+		<section>
+			<title>The Network Module</title>
+			<formalpara>
+				<para>The network module implement a few classes to enable interconnectivity via 
+				TCP/IP, thus making it possible to write both client and server network applications.
+				It also provides a name resolution functionality. The classes you'll need to master
+				are <classname>NHostAddress</classname> and <classname>NTcpSocket</classname>, which 
+				is a specialization of <classname>NAbstractSocket</classname>.
+				</para>
+
+			</formalpara>	
+		</section>
+
+		<section>
+			<title>The Security Module</title>
+			<formalpara>
+				<para>For now it only have functionality for working with hashes (md5, sha1, etc).</para>
+			</formalpara>	
+		</section>
+
+		<section>
+			<title>The XML Module</title>
+			<formalpara>
+				<para>This module has classes to read, parse and write XML files. It abstracts a 
+				few concepts of XML like nodes, documents, etc. There are few classes that might
+				be of your interest, they are:</para>
+				<itemizedlist>
+					<listitem>
+						<para><classname>NXmlReader</classname>: a reader for XML files.</para>
+					</listitem>
+					<listitem>
+						<para><classname>NXmlDocument</classname>: the XML document files.</para>
+					</listitem>
+					<listitem>
+						<para><classname>NXmlWriter</classname>: a writer for XML files.</para>
+					</listitem>
+					<listitem>
+						<para><classname>NXmlAbstractParser</classname>: the base class for the other
+						 XML parsing classes.</para>
+					</listitem>
+				</itemizedlist>				
+				
+			</formalpara>	
+		</section>
+
+
+		<section>
+			<title>The DBal Module</title>
+			<formalpara>
+				<para>The module for Database connectivity. At this moment NUS has drivers only 
+				for MySQL database. The important classes you'll want to check in this module are:
+				</para>
+
+				<itemizedlist>
+					<listitem>
+						<para><classname>NSql</classname>: the base class for database connectivity. If 
+						are going to write a new driver you need to specialize this class. The
+						<classname>NMySQL</classname> class is the MySQL database driver.</para>
+					</listitem>
+					<listitem>
+						<para><classname>NSqlQuery</classname>: abstracts a SQL query.</para>
+					</listitem>
+					<listitem>
+						<para><classname>NSqlRecord</classname>: an record from the database, as a 
+						result of running a query that returns data (like a <function>SELECT</function>
+						for example).</para>
+					</listitem>
+				</itemizedlist>				
+				
+			</formalpara>	
+		</section>
+		
+		<section>
+			<title>The Examples</title>
+			<formalpara>
+				<para>All the important classes on NUS comes with examples. The examples are 
+				installed in <filename>/usr/src/nus</filename> and you can browse that 
+				directory for them. You can also find them in the API, in the 
+				<ulink url="http://dev.angusyoung.org/docs/0.3.0/api/examples.html">examples page</ulink>.
+				</para>
+			</formalpara>	
+		</section>	
+	</chapter>
+	
+	<chapter id="advanced">
+		<title>Advanced Topics</title>
+		<section>
+			<title>Getting NUS from SVN repository</title>
+			<formalpara>
+				<para>If you want to keep up-to-date with NUS development, you may want to check our 
+					<application>subversion</application> repository at 
+					<ulink url="http://svn.angusyoung.org/nus">http://svn.angusyoung.org/nus</ulink>.
+				</para>
+				<para>The important stuff is available in the following sub-repositories:</para>
+				<itemizedlist>
+					<listitem>
+						<para><ulink url="http://svn.angusyoung.org/nus/trunk">Trunk</ulink>.: 
+						NUS development repository.</para>
+					</listitem>
+					<listitem>
+						<para><ulink url="http://svn.angusyoung.org/nus/branches">Stable</ulink>.: 
+						NUS stable repository.</para>
+					</listitem>
+				</itemizedlist>		
+			</formalpara>
+		</section>
+	</chapter>
+	
+	
+	<chapter id="support">
+		<title>Getting Support</title>
+		<section>
+			<title>Discussion Groups</title>
+			<formalpara>
+				<para>There's a a google group that you can subscribe and ask for help. The group
+				can be subscribed at the address 
+				<ulink url="http://groups.google.com/group/nemesis-utilities-system">http://groups.google.com/group/nemesis-utilities-system</ulink>.
+				<note>Do not send an email to the author requesting for help.</note>
+				</para>
+			</formalpara>
+		</section>
+		
+		<section>
+			<title>Bugzilla</title>
+			<formalpara>
+				<para>Found a bug in NUS? Use the bugzilla to report the issue you've found. You
+				can access it via 
+				<ulink url="http://dev.angusyoung.org/bugs/">http://dev.angusyoung.org/bugs/</ulink>.
+				</para>
+			</formalpara>
+		</section>
+	</chapter>
+	
+	
+	<chapter id="acknowledgements">
+		<title>Acknowledgements</title>
+		<formalpara>
+			<para>I'd like to thank the following projects and/or people for their hard work to provide
+			us with good, open source tools: FSF, GCC, CMake, Libxml, Trolltech, OpenSSL, Wordpress, 
+			Mozilla, PHP and KDE. 
+			Special thanks to KDE for sharing the CSS file of their documentation on an open license: 
+			their CSS is used in this page.
+			</para>
+		</formalpara>
+	</chapter>
+</book>

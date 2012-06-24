@@ -1,0 +1,27 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:p="http://dev.angusyoung.org"
+	targetNamespace="http://dev.angusyoung.org">
+
+<element name="programming_languages" type="p:programming_languages_type" />
+<element name="language" type="p:language_type" />
+<element name="type" type="string"/>
+<element name="compiler" type="string" />
+<element name="interpreter" type="string" />
+
+<complexType name="programming_languages_type">
+	<sequence>
+		<element ref="p:language"  minOccurs="0" maxOccurs="128"/>
+	</sequence>
+</complexType>
+
+<complexType name="language_type">
+	<sequence>
+		<element ref="p:type" />
+		<choice>
+			<element ref="p:compiler" minOccurs="0" maxOccurs="128"/>
+			<element ref="p:interpreter"  minOccurs="0" maxOccurs="128"/>
+		</choice>
+	</sequence>
+	<attribute name="name" type="string" />
+</complexType>
+</schema>

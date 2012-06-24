@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<programming_languages xmlns="http://dev.angusyoung.org" 
+		       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		       xsi:schemaLocation="nxmlreader-3.xsd">
+	<language name="c++">
+		<!-- Note the small, subtle typo above -->
+		<type>compiled</type>
+		<compiler>g++</compiler>
+		<compiler>icc</compiler>
+	</language>
+	<language name="python">
+		<type>interpreted</type>
+		<interpreter>python</interpreter>
+	</language>
+</programming_languages>

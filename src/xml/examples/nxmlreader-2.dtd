@@ -1,0 +1,8 @@
+<!ELEMENT programming_languages (language*)>
+
+<!ELEMENT language (type,compiler*,interpreter*)>
+<!ATTLIST language name CDATA #REQUIRED>
+
+<!ELEMENT type (#PCDATA)>
+<!ELEMENT compiler (#PCDATA)>
+<!ELEMENT interpreter (#PCDATA)>

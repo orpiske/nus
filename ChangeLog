@@ -1,0 +1,28 @@
+0.3 
+- Rewrote the NString class using char* instead of std::string
+- Added regex class NRegex
+- Added database module for MySQL
+- Changed installation path of CMakeModules to a more standards-compliant path
+- Fixed missing/incorrect system headers
+- Moved the examples out of the package
+- Added replace methods for NString class
+- Improved the documentation
+- Fixed errors on NOpt and NGetOpt classes
+- Removed some memory leaks
+- Added variable data type class
+- Added keypair data structure
+- Added an application to create new NUS projects
+- Added NFileInfo class, used to obtain file information 
+- Added NDir class, used to obtain directory contents
+- Fixed problems with default arguments in NTcpSocket
+
+0.2
+- Added support for Mac OS X
+- Removed NLog class
+- Added Security module
+- Security module: added class to manipulate hashes
+- Added missing documentation
+- Changed the inheritance of xml and network classes to be a specialization of NObject
+
+0.1 - 28/01/2007
+- First release

@@ -1,0 +1,42 @@
+SET (ICONV_CONTRIB_VERSION 1.9.2)
+
+IF (WIN32) 
+	SET(NUS_CONTRIB_ICONV
+		${CMAKE_BINARY_DIR}/contrib/iconv-${ICONV_CONTRIB_VERSION}.win32/
+	)
+	
+	FIND_PATH(ICONV_INCLUDE_DIR 
+		iconv.h
+		PATHS
+		${NUS_CONTRIB_ICONV}/include
+	)
+
+################
+# Checks for iconv C headers
+################
+	FIND_LIBRARY(ICONV_LIBRARY NAMES 
+		NAMES iconv
+		PATHS
+		${NUS_CONTRIB_ICONV}/lib
+	)
+	
+	INCLUDE_DIRECTORIES(
+		${ICONV_INCLUDE_DIR}
+	)
+
+	LINK_DIRECTORIES(
+		${ICONV_LIBRARY_DIR}
+	)
+	
+	IF (NOT ICONV_LIBRARY) 
+		MESSAGE(FATAL_ERROR "Unable to find contrib library: iconv")
+	ENDIF (NOT ICONV_LIBRARY)
+	
+	
+	MARK_AS_ADVANCED(
+		ICONV_LIBRARY
+		ICONV_INCLUDE_DIR
+		ICONV_LIBRARY_DIR
+	)
+ENDIF(WIN32)
+
