@@ -8,5 +8,5 @@ not to do stuff in C++). I don't recommend using it for anything serious (it may
 References
 ----
 
-* [Old Documentation](http://dev.angusyoung.org/docs/0.3.0/nus.html)
-* [Old API Documentation](http://dev.angusyoung.org/docs/0.3.0/api/classes.html)
+* [Old Documentation](http://www.orpiske.net/legacy/nus/doc/nus.html)
+* [Old API Documentation](http://www.orpiske.net/legacy/nus/doc/api/classes.html)
